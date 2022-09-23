@@ -79,7 +79,37 @@ def transition_model(corpus, page, damping_factor,num_of_decimal=5):
 
 
 def sample_pagerank(corpus, damping_factor, n):
-    raise NotImplementedError
+    
+    #Return PageRank values for each page by sampling `n` pages
+    #according to transition model, starting with a page at random.
+
+    #generating random sample from a list contains all the pages
+    random_sample = random.choice([ key for key,value in corpus.items()])
+    
+    #generating new dict with keys are the pages and values are 0
+    new_dict = {}
+    for e in (corpus):
+        new_dict[e] = 0
+    
+    #calculating the occurance of the random sample
+    new_dict[random_sample] += 1
+    total = n
+    
+    #iterating n times and in each time we generate transition model using our random sample (except for the first time), 
+    #and then choose from the the list of pages based on the transition model probabilities as weights, then we add it to the
+    #new_dict we created, then our random sample will be the last sample we generated
+    while n != 0:
+        new_model = transition_model(corpus, random_sample, 0.85)
+        next_random_sample = random.choices([ key for key,value in new_model.items()],
+                                         [value for key,value in new_model.items()], k=1)[0]
+        new_dict[next_random_sample] += 1
+        random_sample = next_random_sample
+        n -= 1
+        
+    #calcuating proportion of all the pages using the total number of samples
+    for key, value in new_dict.items():
+        new_dict[key] = value/total
+    return new_dict
 
 def iterate_pagerank(corpus, damping_factor):
     raise NotImplementedError
