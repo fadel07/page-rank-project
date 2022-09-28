@@ -112,7 +112,42 @@ def sample_pagerank(corpus, damping_factor, n):
     return new_dict
 
 def iterate_pagerank(corpus, damping_factor):
-    raise NotImplementedError
+    
+    #Return PageRank values for each page by iteratively updating
+    #PageRank values until convergence.
+    
+    #generating new dict with keys are the pages and values are 1/N where N is the number of pages
+    dict_2 = {}
+    for e in (corpus):
+        dict_2[e] = 1/len(corpus)
+
+    flag = True
+    while flag:
+        
+        #creating a copy from the values to use at as old values for comparison
+        prev_dict = dict_2.copy()
+        
+        #iterating over the N pages and for each page(p), finding which pages(i) that link to that page(p), and dividing the 
+        #value with the number of links in that page(i) and summing it and then applying the formula 
+        for each_page in dict_2:
+            value = 0
+            value = sum([dict_2[page]/len(corpus[page]) for page in corpus if each_page in corpus[page]])
+            value = 0.0375 + (damping_factor*value)
+            dict_2[each_page] = value
+        
+        result = []
+        #after the iteration over the N pages, comparing it with the previous value, until no value  changes by more than 0.001
+        for page in dict_2:
+            if abs(prev_dict[page] - dict_2[page]) >= 0.001:
+                result.append(True)
+            else:
+                result.append(False)
+        if any(result):
+            #prev_dict = dict_2
+            continue
+        else:
+            flag = False
+    return dict_2
 
 
 if __name__ == "__main__":
