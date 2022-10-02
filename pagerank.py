@@ -51,10 +51,9 @@ def transition_model(corpus, page, damping_factor,num_of_decimal=5):
     
     #Return a probability distribution over which page to visit next,
     #given a current page.
-
-    new_dict = {}
-    for e in (corpus):
-        new_dict[e] = 0
+    
+    #creating defult dict with 0 value for each page
+    new_dict = {page:0 for page in corpus}
     
     #probability that the surfer should randomly choose one of all pages
     prob_random = float((1-damping_factor)/len(corpus))
@@ -87,9 +86,7 @@ def sample_pagerank(corpus, damping_factor, n):
     random_sample = random.choice([ key for key,value in corpus.items()])
     
     #generating new dict with keys are the pages and values are 0
-    new_dict = {}
-    for e in (corpus):
-        new_dict[e] = 0
+    new_dict = {page:0 for page in corpus}
     
     #calculating the occurance of the random sample
     new_dict[random_sample] += 1
@@ -117,9 +114,7 @@ def iterate_pagerank(corpus, damping_factor):
     #PageRank values until convergence.
     
     #generating new dict with keys are the pages and values are 1/N where N is the number of pages
-    dict_2 = {}
-    for e in (corpus):
-        dict_2[e] = 1/len(corpus)
+    dict_2 = {page: 1/len(corpus) for page in corpus}
 
     flag = True
     while flag:
